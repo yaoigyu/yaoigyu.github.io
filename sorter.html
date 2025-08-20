@@ -1,27 +1,250 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TXT Song Sorter</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        input, button { margin: 10px 0; }
-    </style>
-</head>
-<body>
-    <h1>TXT Song Sorter</h1>
-    <input type="text" id="songInput" placeholder="Enter song names separated by commas" style="width: 300px;">
-    <button id="sortButton">Sort Songs</button>
-    <h2>Sorted Songs:</h2>
-    <div id="sortedSongs"></div>
+<meta charset="UTF-8">
+<title>TXT Song Sorter</title>
+<link href='https://fonts.googleapis.com/css?family=Josefin+Slab:600' rel='stylesheet' type='text/css'>
+<style>
+#mainTable{
+    font-size: 19px;
+    font-family: 'Times New Roman', serif;
+    text-align: center;
+    vertical-align: middle;
+    width: 410px;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: separate;
+    border-spacing: 10px 5px;
+}
+#leftField, #rightField{
+    width: 120px;
+    height: 70px;
+    border: 1px solid #000;
+    cursor: pointer;
+    vertical-align: middle;
+    padding: 10px;
+}
+.middleField{
+    width: 120px;
+    height: 50px;
+    border: 1px solid #000;
+    cursor: pointer;
+    vertical-align: middle;
+    padding: 10px;
+}
+a{ color: #e097d9; text-decoration : none; }
+a:hover{ color: #8f8f8f; }
+body { width: 600px; margin: 0 auto; font-family: 'Times New Roman', serif; }
+.instructions { font-size: 18px; }
+</style>
+<script type="text/javascript">
+var namMember = [
+"crown",
+"blue orangeade",
+"cat & dog",
+"nap of a star",
+"our summer",
+"new rules",
+"run away",
+"roller coaster",
+"poppin star",
+"can't we just leave the monster alive",
+"magic island",
+"20cm",
+"angel or devil",
+"drama",
+"can't you see me",
+"fairy of shampoo",
+"maze in the mirror",
+"puma",
+"eternally",
+"everlasting shine",
+"ghosting",
+"blue hour",
+"we lost the summer",
+"wishlist",
+"way home",
+"your light",
+"loser lover",
+"anti-romantic",
+"0x1lovesong",
+"magic",
+"ice cream",
+"what if i had been that puma",
+"no rules",
+"moa diary",
+"dear sputnik",
+"frost",
+"eyes",
+"ito",
+"opening sequence",
+"good boy gone bad",
+"trust fund baby",
+"lonely boy",
+"thursday's child",
+"ps5",
+"valley of lies",
+"ring",
+"hitori no yoru",
+"free falling",
+"devil by the window",
+"sugar rush ride",
+"happy fools",
+"tinnitus",
+"farewell neverland",
+"goodbye now",
+"do it like that",
+"back for more",
+"hydrangea love",
+"growing pain",
+"chasing that feeling",
+"dreamer",
+"deep down",
+"happily ever after",
+"skipping stones",
+"blue spring",
+"sweat",
+"i'll see you there tomorrow",
+"deja vu",
+"miracle",
+"the killa",
+"quarter life",
+"heaven",
+"over the moon",
+"danger",
+"resist",
+"forty one winks",
+"higher than heaven",
+"love language",
+"upside down kiss",
+"beautiful strangers",
+"ghost girl",
+"sunday driver",
+"dance with you",
+"take my half",
+"bird of night",
+"song of the stars",
+"we'll never change",
+"kitto zutto"
+];
 
-    <script>
-        document.getElementById('sortButton').addEventListener('click', function() {
-            const input = document.getElementById('songInput').value;
-            const songs = input.split(',').map(song => song.trim()).sort();
-            document.getElementById('sortedSongs').innerHTML = songs.join('<br>');
-        });
-    </script>
+var lstMember = [], parent = [], equal = [], rec = [], cmp1,cmp2,head1,head2,nrec;
+var numQuestion, totalSize, finishSize, finishFlag;
+
+function initList(){
+    var n = 0, mid, i;
+    lstMember[n] = [];
+    for (i=0; i<namMember.length; i++) lstMember[n][i] = i;
+    parent[n] = -1;
+    totalSize = 0; n++;
+    for (i=0; i<lstMember.length; i++) {
+        if(lstMember[i].length>=2) {
+            mid = Math.ceil(lstMember[i].length/2);
+            lstMember[n] = lstMember[i].slice(0,mid); totalSize += lstMember[n].length; parent[n] = i; n++;
+            lstMember[n] = lstMember[i].slice(mid,lstMember[i].length); totalSize += lstMember[n].length; parent[n] = i; n++;
+        }
+    }
+    for (i=0; i<namMember.length; i++) rec[i] = 0; nrec = 0;
+    for (i=0; i<=namMember.length; i++) equal[i] = -1;
+    cmp1 = lstMember.length-2; cmp2 = lstMember.length-1;
+    head1 = 0; head2 = 0; numQuestion = 1; finishSize = 0; finishFlag = 0;
+}
+function sortList(flag){
+    var i,str;
+    if (flag<0) {
+        rec[nrec] = lstMember[cmp1][head1]; head1++; nrec++; finishSize++;
+        while (equal[rec[nrec-1]]!=-1) { rec[nrec]=lstMember[cmp1][head1]; head1++; nrec++; finishSize++; }
+    }
+    else if (flag>0) {
+        rec[nrec] = lstMember[cmp2][head2]; head2++; nrec++; finishSize++;
+        while (equal[rec[nrec-1]]!=-1) { rec[nrec]=lstMember[cmp2][head2]; head2++; nrec++; finishSize++; }
+    }
+    else {
+        rec[nrec] = lstMember[cmp1][head1]; head1++; nrec++; finishSize++;
+        while (equal[rec[nrec-1]]!=-1) { rec[nrec]=lstMember[cmp1][head1]; head1++; nrec++; finishSize++; }
+        equal[rec[nrec-1]] = lstMember[cmp2][head2];
+        rec[nrec] = lstMember[cmp2][head2]; head2++; nrec++; finishSize++;
+        while (equal[rec[nrec-1]]!=-1) { rec[nrec]=lstMember[cmp2][head2]; head2++; nrec++; finishSize++; }
+    }
+    if (head1<lstMember[cmp1].length && head2==lstMember[cmp2].length)
+        while (head1<lstMember[cmp1].length){ rec[nrec]=lstMember[cmp1][head1]; head1++; nrec++; finishSize++; }
+    else if (head1==lstMember[cmp1].length && head2<lstMember[cmp2].length)
+        while (head2<lstMember[cmp2].length){ rec[nrec]=lstMember[cmp2][head2]; head2++; nrec++; finishSize++; }
+    if (head1==lstMember[cmp1].length && head2==lstMember[cmp2].length) {
+        for (i=0; i<lstMember[cmp1].length+lstMember[cmp2].length; i++)
+            lstMember[parent[cmp1]][i] = rec[i];
+        lstMember.pop(); lstMember.pop(); cmp1-=2; cmp2-=2; head1=0; head2=0;
+        if (head1==0 && head2==0) { for (i=0; i<namMember.length; i++) rec[i]=0; nrec=0; }
+    }
+    if (cmp1<0) {
+        str = "battle #"+(numQuestion-1)+"<br>"+Math.floor(finishSize*100/totalSize)+"% sorted.";
+        document.getElementById("battleNumber").innerHTML = str;
+        showResult();
+        finishFlag = 1;
+    }
+    else showImage();
+}
+function showResult() {
+    var ranking = 1, sameRank = 1, str="", i;
+    str += "<table style='width:200px; font-size:18px; line-height:120%; margin-left:auto; margin-right:auto; border:1px solid #000; border-collapse:collapse' align='center'>";
+    str += "<tr><td style='color:#ffffff; background-color:#e097d9; text-align:center;'>rank</td><td style='color:#ffffff; background-color:#e097d9; text-align:center;'>song</td></tr>";
+    for (i=0; i<namMember.length; i++) {
+        str += "<tr><td style='border:1px solid #000; text-align:center; padding-right:5px;'>"+ranking+"</td><td style='border:1px solid #000; padding-left:5px;'>"+namMember[lstMember[0][i]]+"</td></tr>";
+        if (i<namMember.length-1) {
+            if (equal[lstMember[0][i]]==lstMember[0][i+1]) sameRank++;
+            else { ranking += sameRank; sameRank = 1; }
+        }
+    }
+    str += "</table>";
+    document.getElementById("resultField").innerHTML = str;
+}
+function showImage() {
+    var str0 = "battle #"+numQuestion+"<br>"+Math.floor(finishSize*100/totalSize)+"% sorted.";
+    var str1 = ""+toNameFace(lstMember[cmp1][head1]);
+    var str2 = ""+toNameFace(lstMember[cmp2][head2]);
+    document.getElementById("battleNumber").innerHTML = str0;
+    document.getElementById("leftField").innerHTML = str1;
+    document.getElementById("rightField").innerHTML = str2;
+    numQuestion++;
+}
+function toNameFace(n){ return namMember[n]; }
+window.onload = function(){ initList(); showImage(); }
+</script>
+</head>
+<body text="#000000" bgcolor="#ffffff" link="#e097d9" vlink="#e097d9" alink="#79a2c9">
+<p class="instructions">
+<center><br /><br />
+<b>TXT Song Sorter</b><br /><br>
+Pick which song you like better in each battle to get an accurate list of your<br>
+favorite TXT songs.<br>
+Note: Hitting 'no opinion' or 'I like both' frequently will negatively affect your results.<br /><br />
+</center>
+</p>
+<table id="mainTable" align="center">
+<tbody>
+<tr>
+<td id="battleNumber" colspan="3" style="padding-bottom: 10px; text-align:center;"><b>battle #1<br>0% sorted.</b></td>
+</tr>
+<tr>
+<td id="leftField" onclick="if(finishFlag==0) sortList(-1);" rowspan="2" style="text-align:center;"></td>
+<td class="middleField" onclick="if(finishFlag==0) sortList(0);" style="text-align:center;">I like both</td>
+<td id="rightField" onclick="if(finishFlag==0) sortList(1);" rowspan="2" style="text-align:center;"></td>
+</tr>
+<tr>
+<td class="middleField" onclick="if(finishFlag==0) sortList(0);"style="text-align:center;">no opinion</td>
+</tr>
+</tbody></table>
+<br><br>
+<div id="resultField" style="text-align: center;">
+<br>
+</div>
+<p class="other">
+<center>
+<small>
+<br /><br />used with permission.<br /><br/>
+<a href="http://biasorter.tumblr.com/">created by biasorter</a>.
+</small>
+</center>
+</p>
 </body>
 </html>
