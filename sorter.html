@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TXT Song Sorter</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, button { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>TXT Song Sorter</h1>
+    <input type="text" id="songInput" placeholder="Enter song names separated by commas" style="width: 300px;">
+    <button id="sortButton">Sort Songs</button>
+    <h2>Sorted Songs:</h2>
+    <div id="sortedSongs"></div>
+
+    <script>
+        document.getElementById('sortButton').addEventListener('click', function() {
+            const input = document.getElementById('songInput').value;
+            const songs = input.split(',').map(song => song.trim()).sort();
+            document.getElementById('sortedSongs').innerHTML = songs.join('<br>');
+        });
+    </script>
+</body>
+</html>
