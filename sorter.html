@@ -5,37 +5,88 @@
 <title>TXT Song Sorter</title>
 <link href='https://fonts.googleapis.com/css?family=Josefin+Slab:600' rel='stylesheet' type='text/css'>
 <style>
-#mainTable{
+body {
+    background: #fff;
+    font-family: 'Josefin Slab', 'Times New Roman', serif;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.instructions {
+    font-size: 18px;
+    text-align: center;
+    margin: 30px 0 10px 0;
+}
+#mainTable {
     font-size: 19px;
-    font-family: 'Times New Roman', serif;
+    font-family: 'Josefin Slab', 'Times New Roman', serif;
     text-align: center;
     vertical-align: middle;
-    width: 410px;
+    width: 420px;
     margin-left: auto;
     margin-right: auto;
     border-collapse: separate;
     border-spacing: 10px 5px;
 }
-#leftField, #rightField{
+#leftField, #rightField {
+    background-color: #fbeaf7;
+    color: #ca5ca5;
     width: 120px;
     height: 70px;
-    border: 1px solid #000;
+    border: 2px solid #e097d9;
+    border-radius: 10px;
     cursor: pointer;
     vertical-align: middle;
+    font-size: 20px;
+    font-weight: bold;
     padding: 10px;
+    transition: background 0.2s;
 }
-.middleField{
+#leftField:hover, #rightField:hover {
+    background-color: #e097d9;
+    color: #fff;
+}
+.middleField {
     width: 120px;
     height: 50px;
-    border: 1px solid #000;
+    border: 1px solid #e097d9;
+    border-radius: 6px;
     cursor: pointer;
     vertical-align: middle;
+    background: #fff;
+    color: #e097d9;
+    font-size: 17px;
     padding: 10px;
+    margin: 2px 0;
+    transition: background 0.2s;
 }
-a{ color: #e097d9; text-decoration : none; }
-a:hover{ color: #8f8f8f; }
-body { width: 600px; margin: 0 auto; font-family: 'Times New Roman', serif; }
-.instructions { font-size: 18px; }
+.middleField:hover {
+    background: #e097d9;
+    color: #fff;
+}
+.resultTable {
+    width: 250px;
+    font-size: 18px;
+    line-height: 120%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #e097d9;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.resultTable th {
+    background: #e097d9;
+    color: #fff;
+    text-align: center;
+    padding: 6px;
+}
+.resultTable td {
+    border: 1px solid #e097d9;
+    padding: 5px 8px;
+    text-align: left;
+}
+a { color: #e097d9; text-decoration: none; }
+a:hover { color: #ca5ca5; }
 </style>
 <script type="text/javascript">
 var namMember = [
@@ -186,10 +237,9 @@ function sortList(flag){
 }
 function showResult() {
     var ranking = 1, sameRank = 1, str="", i;
-    str += "<table style='width:200px; font-size:18px; line-height:120%; margin-left:auto; margin-right:auto; border:1px solid #000; border-collapse:collapse' align='center'>";
-    str += "<tr><td style='color:#ffffff; background-color:#e097d9; text-align:center;'>rank</td><td style='color:#ffffff; background-color:#e097d9; text-align:center;'>song</td></tr>";
+    str += "<table class='resultTable'><tr><th>rank</th><th>song</th></tr>";
     for (i=0; i<namMember.length; i++) {
-        str += "<tr><td style='border:1px solid #000; text-align:center; padding-right:5px;'>"+ranking+"</td><td style='border:1px solid #000; padding-left:5px;'>"+namMember[lstMember[0][i]]+"</td></tr>";
+        str += "<tr><td style='text-align:center;'>"+ranking+"</td><td>"+namMember[lstMember[0][i]]+"</td></tr>";
         if (i<namMember.length-1) {
             if (equal[lstMember[0][i]]==lstMember[0][i+1]) sameRank++;
             else { ranking += sameRank; sameRank = 1; }
@@ -211,40 +261,33 @@ function toNameFace(n){ return namMember[n]; }
 window.onload = function(){ initList(); showImage(); }
 </script>
 </head>
-<body text="#000000" bgcolor="#ffffff" link="#e097d9" vlink="#e097d9" alink="#79a2c9">
+<body>
 <p class="instructions">
-<center><br /><br />
-<b>TXT Song Sorter</b><br /><br>
-Pick which song you like better in each battle to get an accurate list of your<br>
-favorite TXT songs.<br>
-Note: Hitting 'no opinion' or 'I like both' frequently will negatively affect your results.<br /><br />
-</center>
+<b>TXT Song Sorter</b><br>
+Pick which song you like better in each battle to get an accurate list of your favorite TXT songs.<br>
+Note: Hitting 'no opinion' or 'I like both' frequently will negatively affect your results.<br>
 </p>
-<table id="mainTable" align="center">
+<table id="mainTable">
 <tbody>
 <tr>
 <td id="battleNumber" colspan="3" style="padding-bottom: 10px; text-align:center;"><b>battle #1<br>0% sorted.</b></td>
 </tr>
 <tr>
-<td id="leftField" onclick="if(finishFlag==0) sortList(-1);" rowspan="2" style="text-align:center;"></td>
-<td class="middleField" onclick="if(finishFlag==0) sortList(0);" style="text-align:center;">I like both</td>
-<td id="rightField" onclick="if(finishFlag==0) sortList(1);" rowspan="2" style="text-align:center;"></td>
+<td id="leftField" onclick="if(finishFlag==0) sortList(-1);" rowspan="2"></td>
+<td class="middleField" onclick="if(finishFlag==0) sortList(0);">I like both</td>
+<td id="rightField" onclick="if(finishFlag==0) sortList(1);" rowspan="2"></td>
 </tr>
 <tr>
-<td class="middleField" onclick="if(finishFlag==0) sortList(0);"style="text-align:center;">no opinion</td>
+<td class="middleField" onclick="if(finishFlag==0) sortList(0);">No opinion</td>
 </tr>
 </tbody></table>
-<br><br>
 <div id="resultField" style="text-align: center;">
-<br>
 </div>
-<p class="other">
-<center>
+<p style="text-align:center; margin-top:50px;">
 <small>
-<br /><br />used with permission.<br /><br/>
+used with permission.<br>
 <a href="http://biasorter.tumblr.com/">created by biasorter</a>.
 </small>
-</center>
 </p>
 </body>
 </html>
